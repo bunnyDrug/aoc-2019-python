@@ -3,20 +3,14 @@ ADD = 1
 MUL = 2
 HLT = 99
 
-# ROUTINES/MICROCODE?
-ADD_ROUTINE = lambda parm1, parm2: (parm1 + parm2)
-MUL_ROUTINE = lambda parm1, parm2: (parm1 * parm2)
-HLT_ROUTINE = lambda: halt()
-
-
 OPCODE_ROUTINE_LOOKUP_TABLE = {
-    ADD: ADD_ROUTINE,
-    MUL: MUL_ROUTINE,
-    HLT: HLT_ROUTINE,
+    ADD: lambda parm1, parm2: (parm1 + parm2),
+    MUL: lambda parm1, parm2: (parm1 * parm2),
+    HLT: lambda: halt(),
 }
 
 BIT_WIDT = 4
-EIP = 0  # not a constant but makes sense to declare here
+EIP = 0  # ExecutionInstructionPointer
 
 
 def halt():
@@ -43,12 +37,6 @@ while True:
     p2 = program[EIP + 2]
     p3 = program[EIP + 3]  # Destination
 
-    # read the contents of the program at the register locations - if r1 = 3
-    # then we are reading the program memory at position 3
-    output = routine(program[p1], program[p2])
-    print(f"{output}")
-    # program[p3] = output
-    # run the routine microcode
-    # and store it in the reg
+    program[p3] = routine(program[p1], program[p2])
 
     EIP += BIT_WIDT  # move instruction pointer
